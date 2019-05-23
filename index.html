@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <title>Simple setInterval clock</title>
+    <style>
+      p {
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <p id="clock"></p>
+    <button id="start">Start</button>
+    <button id="stop">Stop</button>
+    <button id="reset">Reset</button>
+    <script>
+
+    // Store Variables:
+    // Store references to buttons
+    const startBtn = document.getElementById('start');
+    const stopBtn = document.getElementById('stop');
+    const resetBtn = document.getElementById('reset');
+
+    // Set the paragraph that will display the time
+    const displayTimeHere = document.getElementById('clock');
+
+    // *Contains the function displayTime which runs the stopwatch. 
+    // It will be used on event listeners so we can clearInterval and start the stopwatch 
+    // Without causing scope issues/multiple stopwatches to be run at one time*
+    let stopWatchInterval;
+
+    // Set counter
+    let secondCount = 0;
+
+
+    // Functions:
+    //Set function to run the clock
+    function displayTime(){
+        
+        let hours = Math.floor((secondCount / 3600));
+        let minutes =  Math.floor((secondCount % 3600)/60);
+        let seconds = (secondCount % 60);
+        let displayHours = (hours < 10) ? '0' + hours : hours;
+        let displayMinutes = (minutes < 10) ? '0' + minutes : minutes;
+        let displaySeconds = (seconds < 10) ? '0' + seconds : seconds;
+
+        // Display counter in hours/min/sec into the display paragraph
+        displayTimeHere.textContent = displayHours + ':' + displayMinutes + ':' + displaySeconds; 
+
+        // Increment counter
+        secondCount++;
+    }
+
+
+    // Event Listeners:
+    // Start the stopwatch
+    startBtn.addEventListener('click', function(){
+        stopWatchInterval = setInterval(displayTime, 1000);
+    });
+
+    // Stop the stopwatch, but doesn't zero it out
+    stopBtn.addEventListener('click', function(){
+        clearInterval(stopWatchInterval);
+    });
+    
+    // Zero out the stop watch and restart the count
+    resetBtn.addEventListener('click', function(){
+        secondCount = 0;
+        displayTime();
+    });
+
+
+    // Run displayTime() once as soon as the page loads so the clock is displayed
+    displayTime();
+    </script>
+  </body>
+</html>
